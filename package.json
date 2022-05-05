@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "dependencies": {
+    "mathjs": "^10.5.1"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  }
+}
+
