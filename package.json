@@ -1,4 +1,7 @@
 {
+  "name": "simple-iterp",
+  "version": "1.0.0",
+  "description": "Simple n-dimensional linear interpolation",
   "type": "module",
   "dependencies": {
     "mathjs": "^10.5.1"
@@ -7,4 +10,3 @@
     "test": "node test/test.js"
   }
 }
-
