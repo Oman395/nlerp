@@ -4,6 +4,7 @@
   "description": "Simple n-dimensional linear interpolation",
   "type": "module",
   "dependencies": {
+    "canvas": "^2.9.1",
     "mathjs": "^10.5.1"
   },
   "scripts": {
