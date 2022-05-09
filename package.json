@@ -1,6 +1,6 @@
 {
   "name": "nlerp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple n-dimensional linear interpolation",
   "type": "module",
   "dependencies": {

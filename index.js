@@ -132,4 +132,6 @@ export function normalize(point, points) {
 export default {
   lerp,
   rlerp,
+  choose,
+  normalize,
 };
