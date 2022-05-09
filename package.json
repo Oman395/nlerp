@@ -1,5 +1,5 @@
 {
-  "name": "simple-iterp",
+  "name": "nlerp",
   "version": "1.0.0",
   "description": "Simple n-dimensional linear interpolation",
   "type": "module",

@@ -13,8 +13,8 @@ import * as math from "mathjs";
 export function lerp(a, b, c) {
   return math.add(math.multiply(1 - a, b), math.multiply(a, c));
 }
-
 /**
+ *
  * Recursive N-Dimensional linear interpolation
  * @param {number} n - Dimensions
  * @param {array} a - Array of values (vector or scalar). Must be 2 * n long.
@@ -36,7 +36,10 @@ export function rlerp(n, a, t, i, f) {
 
 function classify(p1, p2) {
   let ret = 0;
-  for (let i = 0; i < p1.length; i++) {}
+  for (let i = 0; i < p1.length; i++) {
+    if (p2[i] > p1[i]) ret += 2 ** i;
+  }
+  return ret;
 }
 
 function distance(p1, p2) {
@@ -74,25 +77,58 @@ export function choose(point, points) {
   points = points.sort((a, b) => {
     return distance(b, point) - distance(a, point);
   });
-  points.forEach((point) => {
-    choices[classify(point)] = point;
+  points.forEach((p) => {
+    choices[classify(point, p)] = p;
   });
-  if (choices.length != 2 ** point.length || choices.some((choice) => !choice))
-    return false; // Invalid dataset
+  // if (choices.length != 2 ** point.length || choices.includes(undefined))
+  // return false; // Invalid dataset
   return choices;
 }
 
-choose(
-  [0, 0],
-  [
-    [-1, -1],
-    [2, 2],
-    [0, 1],
-    [1, 2],
-  ]
-);
-
-export function normalize(point, points) {}
+export function normalize(point, points) {
+  // First, we need to change points from
+  // [(x1, x2, ..., xn), ..., (x1, x2, ..., xn)]
+  // to [(x1,...,x1), (x2,...,x2), ..., (xn,...,xn)]
+  // so that we can get maximums a bit easier.
+  let adjpoints = [];
+  for (let i = 0; i < point.length; i++) {
+    adjpoints[i] = [];
+    points.forEach((point) => {
+      adjpoints[i].push(point[i]);
+    });
+  }
+  // Now that we have that, we can start working on normalizing
+  let pre = [];
+  for (let i = 0; i < point.length; i++) {
+    pre[i] = point[i] / math.max(adjpoints[i]);
+  }
+  // Now, we have the values from 0-1, but they aren't actually done yet.
+  // Essentially, if the points are not a square, we will have issues. For example, with these points:
+  // *---*
+  // |     \
+  // *-------*
+  // the point (1,1)
+  // would turn into (0.5, 1)
+  // which will give the value at p:
+  // *-p-*
+  // |      \
+  // *-------*
+  // To fix this, we simply need to run the interpolation once, and multiply the normalized value by the actual pos divided
+  // by the pos we get.
+  // So for example, it would output (0.5,0.5,x), so 1/0.5=2. We multiply the 0.5 by 2 to get an *actual* normalized value
+  // of 1, which gives us the result at p, here:
+  // *---p
+  // |     \
+  // *-------*
+  // Where it should be.
+  let deltas = rlerp(2, points, pre, 0, lerp);
+  console.log(deltas, point);
+  let final = [];
+  pre.forEach((val, i) => {
+    final[i] = (point[i] / deltas[i]) * val;
+  });
+  return final;
+}
 
 export default {
   lerp,
