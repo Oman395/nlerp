@@ -3,6 +3,18 @@
   "version": "1.0.1",
   "description": "Simple n-dimensional linear interpolation",
   "type": "module",
+  "homepage": "https://github.com/Oman395/nlerp",
+  "bugs": {
+    "url": "https://github.com/Oman395/nlerp/issues",
+    "email": "oranroha@gmail.com"
+  },
+  "keywords": [
+    "qlearn",
+    "ml",
+    "interpolation",
+    "lerp",
+    "nlerp"
+  ],
   "dependencies": {
     "mathjs": "^10.5.1"
   },
