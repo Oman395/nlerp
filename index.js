@@ -122,7 +122,6 @@ export function normalize(point, points) {
   // *-------*
   // Where it should be.
   let deltas = rlerp(2, points, pre, 0, lerp);
-  console.log(deltas, point);
   let final = [];
   pre.forEach((val, i) => {
     final[i] = (point[i] / deltas[i]) * val;

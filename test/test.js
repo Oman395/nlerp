@@ -37,5 +37,41 @@ Recursive lerp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`);
   console.log("ERROR IN RLERP: ", e);
 }
 
+try {
+  let choice = iterp.choose(
+    [0.5, 0.5],
+    [
+      [-1, -1, -3],
+      [0, -1, -2],
+      [-1, 0, -1],
+      [0, 0, 0],
+      [1, 0, 1],
+      [0, 1, 2],
+      [1, 1, 3],
+    ]
+  );
+  log += `Choice: ${choice}. Expected 0,0,0,1,0,1,0,1,2,1,1,3`;
+  console.log(`Choice: ${choice}. Expected 0,0,0,1,0,1,0,1,2,1,1,3`);
+} catch (e) {
+  log += e;
+  console.log("ERROR IN CHOOSE: ", e);
+}
+
+try {
+  let p = [1, 1];
+  let points = [
+    [0, 0, 0],
+    [2, 0, 1],
+    [0, 1, 2],
+    [1, 1, 3],
+  ];
+  let norm = iterp.normalize(p, points);
+  log += `Norm: ${norm}. Expected 1,1`;
+  console.log(`Norm: ${norm}. Expected 1,1`);
+} catch (e) {
+  log += e;
+  console.log("ERROR IN NORMALIZE: ", e);
+}
+
 fs.writeFileSync("test/log.txt", log);
 console.log("Log saved in test/log.txt");
