@@ -14,24 +14,58 @@ export function lerp(a, b, c) {
   return math.add(math.multiply(1 - a, b), math.multiply(a, c));
 }
 /**
+ * Recursive N-Dimensional interpolation. Given that the function that can be used is variable, this will work for any
+ * interpolation method; however, if you want linear, it's best to use nlerp.
  *
- * Recursive N-Dimensional linear interpolation
  * @param {number} n - Dimensions
- * @param {array} a - Array of values (vector or scalar). Must be 2 * n long.
+ * @param {array} a - Array of values (vector or scalar). Must be 2 ** n long.
  * @param {array} t - Vector representing the position to interpolate. Must be a vector.
  * @param {number} i - Set this to zero. Used internally for recursion.
  * @param {function} f - Base interpolation function. If you don't know what to use, use this module's lerp function.
  **/
-export function rlerp(n, a, t, i, f) {
+export function riterp(n, a, t, i, f) {
   if (n != 1) {
     let rval = f(
       t[n - 1],
-      rlerp(n - 1, a, t, i, f),
-      rlerp(n - 1, a, t, i + math.pow(2, n - 1), f)
+      riterp(n - 1, a, t, i, f),
+      riterp(n - 1, a, t, i + math.pow(2, n - 1), f)
     );
     return rval;
   }
   return f(t[0], a[i], a[i + 1]);
+}
+
+/**
+ * Improved N-Dimensional linear interpolation, no longer recursive and significantly faster, but does not support other
+ * interpolation methods.
+ *
+ * @param {number} n - Dimensions
+ * @param {array} a - Array of values (vector or scalar). Must be 2 ** n long.
+ * @param {array} t - Vector representing the position to interpolate. Must be a vector.
+ */
+export function nlerp(n, a, t) {
+  if (a.length != 2 ** n)
+    throw new Error(
+      `Point array dimension mismatch! Expected: ${2 ** n}, got: ${a.length}`
+    );
+  if (t.length != n)
+    throw new Error(
+      `Dimension mismatch in point! Expected: ${n}, got: ${t.length}`
+    );
+  for (let i = 0; i < a.length; i++) {
+    let ar = i.toString(2).padEnd(n, "0").split("");
+    ar.forEach((item, ind) => {
+      a[i] = math.multiply(
+        a[i],
+        math.abs(math.subtract(parseInt(item), t[ind]))
+      );
+    });
+  }
+  let sum = a[0];
+  for (let i = 1; i < a.length; i++) {
+    sum = math.add(a[i], sum);
+  }
+  return sum;
 }
 
 function classify(p1, p2) {
@@ -121,7 +155,7 @@ export function normalize(point, points) {
   // |     \
   // *-------*
   // Where it should be.
-  let deltas = rlerp(2, points, pre, 0, lerp);
+  let deltas = riterp(2, points, pre, 0, lerp);
   let final = [];
   pre.forEach((val, i) => {
     final[i] = (point[i] / deltas[i]) * val;
@@ -131,7 +165,8 @@ export function normalize(point, points) {
 
 export default {
   lerp,
-  rlerp,
+  riterp,
+  nlerp,
   choose,
   normalize,
 };

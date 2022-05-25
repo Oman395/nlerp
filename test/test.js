@@ -15,8 +15,8 @@ Lerp, vector: ${lerpV}. Expected 1,1`);
 }
 
 try {
-  let rlerpS = iterp.rlerp(1, [0, 2], [0.5], 0, iterp.lerp);
-  let rlerpV = iterp.rlerp(
+  let rlerpS = iterp.riterp(1, [0, 2], [0.5], 0, iterp.lerp);
+  let rlerpV = iterp.riterp(
     2,
     [
       [0, 0, 1],
@@ -28,13 +28,13 @@ try {
     0,
     iterp.lerp
   );
-  log += `Recursive lerp, scalar: ${rlerpS}. Expected 1
-Recursive lerp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`;
-  console.log(`Recursive lerp, scalar: ${rlerpS}. Expected 1
-Recursive lerp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`);
+  log += `Recursive iterp, scalar: ${rlerpS}. Expected 1
+Recursive iterp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`;
+  console.log(`Recursive iterp, scalar: ${rlerpS}. Expected 1
+Recursive iterp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`);
 } catch (e) {
   log += e;
-  console.log("ERROR IN RLERP: ", e);
+  console.log("ERROR IN RITERP: ", e);
 }
 
 try {
@@ -71,6 +71,27 @@ try {
 } catch (e) {
   log += e;
   console.log("ERROR IN NORMALIZE: ", e);
+}
+
+try {
+  let rlerpS = iterp.nlerp(1, [0, 2], [0.5], 0);
+  let rlerpV = iterp.nlerp(
+    2,
+    [
+      [0, 0, 1],
+      [1, 0, 2],
+      [0, 1, 3],
+      [1, 1, 4],
+    ],
+    [0.5, 0.5]
+  );
+  log += `Nlerp, scalar: ${rlerpS}. Expected 1
+Nlerp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`;
+  console.log(`Nlerp, scalar: ${rlerpS}. Expected 1
+Nlerp, vector: ${rlerpV}. Expected 0.5,0.5,2.5`);
+} catch (e) {
+  log += e;
+  console.log("ERROR IN Nlerp: ", e);
 }
 
 fs.writeFileSync("test/log.txt", log);

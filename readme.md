@@ -10,9 +10,35 @@ Ramble aside, here's some half-decent docs.
 
 ## Documentation
 
-### rlerp
+### nlerp
 
-The rlerp function is the core of the package. It is the function that allows you to do recursive n-linear interpolation; hence the name, recursive lerp.
+This function is the core of the package, allowing for full n-dimensional linear interpolation (now without recursion!). It's only real drawback is that it cannot function for anything other than linear interpolation, so if you plan on using quadratic or other methods, use the riterp function.
+
+#### Parameters
+
+1. Dimensions - Number of dimensions (i.e. 2 for square, 3 for cube, etc). Used for detecting invalid inputs.
+2. Values - 2^Dimensions array of values to interpolate between. Values can be integers or arrays, as long as they are valid for mathjs' `math.multiply` function.
+3. Position - Array of integers, 0-1, representing the position. Length must equal Dimensions.
+
+#### Example
+
+```js
+import { nlerp } from "nlerp";
+
+let vals = [
+  // 2d
+  [0, 0, 0],
+  [1, 0, 1],
+  [0, 1, 2],
+  [1, 1, 3],
+];
+let point = [0.5, 0.5];
+let result = nlerp(2, vals, point); // Should be 0.5,0.5,2.5
+```
+
+### riterp
+
+This function allows for n-dimensional interpolation with any method, and as such provides some utility; however, if you plan to use linear interpolation, use the nlerp function; it is significantly faster.
 
 #### Parameters
 
@@ -25,7 +51,7 @@ The rlerp function is the core of the package. It is the function that allows yo
 #### Example
 
 ```js
-import { rlerp, lerp } from "nlerp";
+import { niterp, lerp } from "nlerp";
 
 let vals = [
   // 2d
@@ -35,7 +61,7 @@ let vals = [
   [1, 1, 3],
 ];
 let point = [0.5, 0.5];
-let result = rlerp(2, vals, point, 0, lerp); // Should be 0.5,0.5,2.5
+let result = niterp(2, vals, point, 0, lerp); // Should be 0.5,0.5,2.5
 ```
 
 ### lerp
